@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import MovieCard from '../components/MovieCard'
 
 function Home() {
@@ -11,11 +11,31 @@ function Home() {
     {id: 5, title: 'Inglorious Bastards', description: 'A movie about a group of Jewish-American soldiers who kill Nazis'},
   ]
   
+ 
+
+  const [search, setSearch] = useState('');
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    alert(search);
+  }
+  
   return (
+    
     <div className='home'>
+        
+        <form onSubmit={handleSearch} className='search'>
+            <input type='text' placeholder='Search for a movie...' className='search-input' value={search} onChange={(e) => setSearch(e.target.value)}/>
+            <button type='submit' className='search-button'>Search</button>
+            
+        </form>
+        
+        
         <div className='movies-grid'>
-            {movies.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
+            {movies.map(
+                (movie) => 
+                    movie.title.toLowerCase().includes(search.toLowerCase()) && (
+                        <MovieCard key={movie.id} movie={movie} />
             ))}
         </div>
     </div>
