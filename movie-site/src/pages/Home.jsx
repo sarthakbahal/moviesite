@@ -66,6 +66,13 @@ function Home() {
       {loading && <div className="loading">Loading...</div>}
       {error && <div className="error">{error}</div>}
       
+      {!search && (
+        <div className="trending-header">
+          <h2>🔥 Trending Now</h2>
+          <p>Discover what's popular in movies right now</p>
+        </div>
+      )}
+      
       <div className='movies-grid'>
         {movies.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />

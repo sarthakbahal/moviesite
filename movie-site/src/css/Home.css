@@ -15,33 +15,94 @@
 
 .search-input {
   flex: 1;
-  padding: 0.75rem 1rem;
-  border: none;
-  border-radius: 4px;
-  background-color: #333;
-  color: white;
+  padding: 1rem 1.5rem;
+  border: 2px solid var(--card-bg);
+  border-radius: 12px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
   font-size: 1rem;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .search-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #666;
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.2);
 }
 
-.search-button {
+.search-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.search-btn {
   padding: 0.75rem 1.5rem;
-  background-color: #e50914;
+  background-color: var(--accent-color);
   color: white;
-  border-radius: 4px;
+  border-radius: 12px;
   font-weight: 500;
-  transition: background-color 0.2s;
+  transition: all 0.3s;
   white-space: nowrap;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.search-button:hover {
-  background-color: #f40612;
+.search-btn:hover {
+  background-color: #ff1a1a;
+  transform: translateY(-2px);
 }
 
+.search-btn:active {
+  transform: translateY(0);
+}
+
+.trending-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.trending-header h2 {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(45deg, var(--accent-color), #ff1a1a);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.trending-header p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--accent-color);
+  font-size: 1.2rem;
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
 
 @media (max-width: 639px) {
   .home {
@@ -50,14 +111,19 @@
 
   .search-form {
     margin-bottom: 1rem;
+    flex-direction: column;
   }
-}
 
-.movies-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  padding: 1rem;
-  width: 100%;
-  box-sizing: border-box;
+  .search-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .trending-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .trending-header p {
+    font-size: 1rem;
+  }
 }
