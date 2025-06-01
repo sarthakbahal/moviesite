@@ -1,43 +1,76 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import MovieCard from '../components/MovieCard'
+import { getMovies, searchMovies } from '../services/api'
+import '../css/Home.css'
 
 function Home() {
   
-  const movies = [
-    {id: 1, title: 'The Dark Knight', description: 'A superhero movie about a bat'},
-    {id: 2, title: 'Star Wars : The Force Awakens', description: 'The first movie of the Star Wars franchise'},
-    {id: 3, title: 'Joker', description: 'DC Comics Villain movie'},
-    {id: 4, title: 'Inside Out', description: 'A story about a girl and her emotions'},
-    {id: 5, title: 'Inglorious Bastards', description: 'A movie about a group of Jewish-American soldiers who kill Nazis'},
-  ]
-  
- 
+  const [movies, setMovies] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [search, setSearch] = useState('');
+  useEffect(() => {
+    const loadmovies = async () => {
+      try{
+        const popularMovies = await getMovies();
+        setMovies(popularMovies);
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+        setError("Failed to fetch movies");
+      }finally{
+        setLoading(false);
+      }
+    };
+    loadmovies();
+  }, []);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    alert(search);
+  const handleSearch = async (searchTerm) => {
+    if (!searchTerm.trim()) {
+      const popularMovies = await getMovies();
+      setMovies(popularMovies);
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      const searchResults = await searchMovies(searchTerm);
+      setMovies(searchResults);
+    } catch (error) {
+      console.error('Error searching movies:', error);
+      setError("Failed to search movies");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+    handleSearch(value);
   }
   
   return (
-    
     <div className='home'>
-        
-        <form onSubmit={handleSearch} className='search'>
-            <input type='text' placeholder='Search for a movie...' className='search-input' value={search} onChange={(e) => setSearch(e.target.value)}/>
-            <button type='submit' className='search-button'>Search</button>
-            
-        </form>
-        
-        
-        <div className='movies-grid'>
-            {movies.map(
-                (movie) => 
-                    movie.title.toLowerCase().includes(search.toLowerCase()) && (
-                        <MovieCard key={movie.id} movie={movie} />
-            ))}
-        </div>
+      <form className='search-form' onSubmit={(e) => e.preventDefault()}>
+        <input
+          type="text"
+          className='search-input'
+          placeholder="Search for movies..."
+          value={search}
+          onChange={handleInputChange}
+        />
+        <button type='submit' className='search-btn'>Search</button>
+      </form>
+
+      {loading && <div className="loading">Loading...</div>}
+      {error && <div className="error">{error}</div>}
+      
+      <div className='movies-grid'>
+        {movies.map((movie) => (
+          <MovieCard key={movie.id} movie={movie} />
+        ))}
+      </div>
     </div>
   )
 }
